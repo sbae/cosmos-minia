@@ -1,6 +1,6 @@
 # Minia
 
-Minia is a small, single-file coding-agent harness for constrained or isolated development environments.
+Minia—short for **MiniAgent**—is a small, single-file coding-agent harness for constrained or isolated development environments.
 
 It is designed for an OpenAI-compatible **Chat Completions** endpoint where native function/tool calling may be unavailable. Instead of relying on API-level tools, the model requests local actions through a compact text protocol:
 
@@ -57,6 +57,33 @@ The text-tool approach is useful when an API gateway accepts ordinary Chat Compl
 - An OpenAI-compatible Chat Completions endpoint.
 - An API key/token accepted by that endpoint.
 
+## Installation
+
+Minia does not require a package manager or installer. Put the single `minia.py` file in any convenient directory and run it with Python.
+
+For example, on Windows:
+
+```powershell
+New-Item -ItemType Directory -Force H:\minia
+```
+
+Then place the code from `minia.py` in:
+
+```text
+H:\minia\minia.py
+```
+
+You can copy the file there directly, or create `H:\minia\minia.py` in an editor and paste the source code into it.
+
+Minia does **not** need to live inside the project you are working on. Run it from the root of whichever project you want it to operate on:
+
+```powershell
+cd H:\my-project
+python H:\minia\minia.py
+```
+
+Minia detects the current project directory and stores that project's session state under its local `.agent/` directory.
+
 ## Configuration
 
 Environment variables:
@@ -84,61 +111,85 @@ $env:MINIA_CONTEXT_BUDGET = "120000"
 
 The API client currently sends a small set of compatibility headers modeled on an environment where they were required by a local gateway. They are **not a general requirement for OpenAI-compatible APIs** and may need to be removed or changed for other environments.
 
+## Quick tutorial
+
+Assume Minia is installed at `H:\minia\minia.py` and the project you want to work on is `H:\my-project`.
+
+Open PowerShell and move into the project:
+
+```powershell
+cd H:\my-project
+```
+
+Then start Minia interactively:
+
+```powershell
+python H:\minia\minia.py
+```
+
+Or give it a task immediately:
+
+```powershell
+python H:\minia\minia.py "inspect this project and explain its architecture"
+```
+
+Because Minia uses the **current working directory** as the project workspace, the executable itself can remain in `H:\minia` while you use it across many unrelated repositories.
+
 ## Usage
 
 From the root of a project:
 
 ```powershell
-python path\to\minia.py "inspect this project and fix the failing tests"
+python H:\minia\minia.py "inspect this project and fix the failing tests"
 ```
 
 Start an interactive session:
 
 ```powershell
-python path\to\minia.py
+python H:\minia\minia.py
 ```
 
 Resume the latest session for the current project:
 
 ```powershell
-python path\to\minia.py --resume
+python H:\minia\minia.py --resume
 ```
 
 Resume and immediately provide another instruction:
 
 ```powershell
-python path\to\minia.py --resume "continue debugging the parser failure"
+python H:\minia\minia.py --resume "continue debugging the parser failure"
 ```
 
 List sessions:
 
 ```powershell
-python path\to\minia.py --sessions
+python H:\minia\minia.py --sessions
 ```
 
 Resume a specific session:
 
 ```powershell
-python path\to\minia.py --resume --session 20260924-113800-fix-parser
+python H:\minia\minia.py --resume --session 20260924-113800-fix-parser
 ```
 
 Force context compaction:
 
 ```powershell
-python path\to\minia.py --resume --compact
+python H:\minia\minia.py --resume --compact
 ```
 
 Disable color:
 
 ```powershell
-python path\to\minia.py --no-color
+python H:\minia\minia.py --no-color
 ```
 
 or:
 
 ```powershell
 $env:NO_COLOR = "1"
-python path\to\minia.py
+python H:\minia\minia.py
 ```
 
 ## Terminal UI
